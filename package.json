@@ -1,0 +1,39 @@
+{
+  "name": "tower-blocks",
+  "description": "Tower Blocks Game",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "lint-staged": {
+    "*.js": [
+      "npm run lint",
+      "git add"
+    ]
+  },
+  "scripts": {
+    "eslint": "eslint --config .eslintrc.js --ext .js --fix './src/**/*.js'",
+    "lint": "npm run eslint",
+    "develop": "parcel ./src/index.html",
+    "start": "npm run develop"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.0.0-0",
+    "@babel/plugin-proposal-class-properties": "^7.2.3",
+    "@babel/preset-env": "^7.2.3",
+    "babel-eslint": "^10.0.1",
+    "eslint": "^4.14.0",
+    "eslint-config-standard": "^11.0.0-beta.0",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-node": "^5.2.1",
+    "eslint-plugin-promise": "^3.6.0",
+    "eslint-plugin-standard": "^3.0.1",
+    "husky": "^0.14.3",
+    "lint-staged": "^7.2.2",
+    "parcel-bundler": "^1.11.0",
+    "sass": "^1.16.0"
+  },
+  "dependencies": {
+    "stats-js": "^1.0.0",
+    "three": "^0.100.0"
+  }
+}

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Tower Blocks</title>
+  <link rel="stylesheet" href="./index.scss">
+  <script src="./responsive.js"></script>
+</head>
+<body>
+  <div id="spinner" class="cube fade in">
+    <div class="cube-face cube-face-top"></div>
+    <div class="cube-face cube-face-right"></div>
+    <div class="cube-face cube-face-bottom"></div>
+    <div class="cube-face cube-face-left"></div>
+    <div class="cube-face cube-face-back"></div>
+    <div class="cube-face cube-face-front"></div>
+  </div>
+
+  <div class="score">Score: <span id="score">0</span></div>
+  <div id="message" class="message fade">You lose</div>
+  <div id="play" class="play fade in">Tap Start Game</div>
+
+  <script src="./index.js"></script>
+</body>
+</html>
