@@ -309,7 +309,7 @@ export class Game {
   }
 
   nextTick () {
-    this.devTool.stats.begin()
+    this.devTool.begin()
 
     this.stage.render()
     this.blocks.forEach((block) => block.nextTick())
@@ -320,7 +320,7 @@ export class Game {
       this.dropBlock = null
     }
 
-    this.devTool.stats.end()
+    this.devTool.end()
     requestAnimationFrame(this.nextTick)
   }
 

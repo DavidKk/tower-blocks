@@ -32,4 +32,12 @@ export default class DevTool {
       })
     }
   }
+
+  begin () {
+    this.stats && this.stats.begin()
+  }
+
+  end () {
+    this.stats && this.stats.end()
+  }
 }
