@@ -33,6 +33,8 @@ export class Game {
     this.drops = new Group()
     this.chops = new Group()
 
+    this.nextTick = this.nextTick.bind(this)
+
     this.stage.add(this.moves)
     this.stage.add(this.drops)
     this.stage.add(this.chops)
@@ -307,6 +309,8 @@ export class Game {
   }
 
   nextTick () {
+    this.devTool.stats.begin()
+
     this.stage.render()
     this.blocks.forEach((block) => block.nextTick())
 
@@ -316,7 +320,8 @@ export class Game {
       this.dropBlock = null
     }
 
-    requestAnimationFrame(this.nextTick.bind(this))
+    this.devTool.stats.end()
+    requestAnimationFrame(this.nextTick)
   }
 
   destory () {
