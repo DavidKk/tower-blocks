@@ -1,0 +1,67 @@
+// Cube
+// ----------------
+
+.cube {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  margin: auto;
+  width: $cubeSize;
+  height: $cubeSize;
+  transform-style: preserve-3d;
+  transform: rotateX(-20deg) rotateY(-45deg);
+  animation: 1.6s cubeRotate infinite ease;
+}
+
+.cube-face {
+  position: absolute;
+  width: $cubeSize;
+  height: $cubeSize;
+  opacity: 1;
+  box-shadow: inset 0 0 ($cubeSize * 2 / 5) rgba(0,0,0,.4);
+  transition: opacity .26s ease-in;
+}
+
+.cube-face-top {
+  margin-top: $cubeSize / 2 * -1;
+  transform: rotateX(90deg);
+}
+
+.cube-face-right {
+  margin-left: $cubeSize / 2;
+  transform: rotateY(90deg); 
+}
+
+.cube-face-bottom {
+ margin-top: $cubeSize / 2;
+ transform: rotateX(90deg);
+}
+
+.cube-face-left {
+  margin-left: $cubeSize / 2 * -1;
+  transform: rotateY(-90deg);
+}
+
+.cube-face-front {
+  transform: translateZ($cubeSize / 2); 
+}
+
+.cube-face-back {
+  transform: translateZ($cubeSize / 2 * -1); 
+}
+
+.cube.fade:not(.in) > .cube-face {
+  opacity: 0;
+}
+
+@keyframes cubeRotate {
+  from {
+    transform: rotateX(-20deg) rotateY(-135deg);
+  }
+
+  to {
+    transform: rotateX(-20deg) rotateY(-45deg);
+  }
+}

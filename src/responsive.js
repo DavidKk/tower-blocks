@@ -1,3 +1,4 @@
-import Responsive from './responsive'
+import responsive from './libs/responsive'
 
-window.addEventListener('resize', Responsive)
+window.addEventListener('resize', responsive)
+responsive()

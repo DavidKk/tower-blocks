@@ -1,7 +1,30 @@
 import map from 'lodash/map'
 import fromPairs from 'lodash/fromPairs'
 
-export function metaFlex (rootFontSize = 16, designClientWidth = 750) {
+export function unusual () {
+  if (navigator.appVersion.match(/(iphone|ipad|ipod)/ig)) {
+    return false
+  }
+
+  let userAgent = navigator.userAgent
+  let webKitVersionMatch = userAgent.match(/Android[\S\s]+AppleWebkit\/(\d{3})/i)
+  if (webKitVersionMatch && webKitVersionMatch[1] > 534) {
+    return false
+  }
+
+  let UCVersionMatch = navigator.userAgent.match(/U3\/((\d+|\.){5,})/i)
+
+  if (UCVersionMatch) {
+    let UCVersion = parseInt(UCVersionMatch[1].split('.').join(''), 10)
+    if (UCVersion < 80) {
+      return true
+    }
+  }
+
+  return false
+}
+
+export function getRootFontSize (rootFontSize = 16, designClientWidth = 750) {
   let meta = document.querySelector('meta[name="viewport"]')
 
   if (!meta) {
@@ -25,11 +48,15 @@ export function metaFlex (rootFontSize = 16, designClientWidth = 750) {
   meta.setAttribute('content', `width=device-width,user-scalable=no,initial-scale=${screenPixelRatio},maximum-scale=${screenPixelRatio},minimum-scale=${screenPixelRatio}`)
 
   // Detect support for meta viewport scaling
-  let fontSize = originClientWidth === docElement.clientWidth
-    ? `${rootFontSize * docElement.clientWidth / designClientWidth}px`
-    : `${rootFontSize / flexRatio * window.devicePixelRatio}px`
+  return originClientWidth === docElement.clientWidth
+    ? rootFontSize * docElement.clientWidth / designClientWidth
+    : rootFontSize / flexRatio * window.devicePixelRatio
+}
 
-  docElement.style.fontSize = fontSize
+export function metaFlex (rootFontSize = 16, designClientWidth = 750) {
+  let docElement = document.documentElement
+
+  docElement.style.fontSize = `${getRootFontSize(rootFontSize, designClientWidth)}px`
   docElement.style.display = 'none'
 
   // Force rerender - important to new Android devices
@@ -39,28 +66,5 @@ export function metaFlex (rootFontSize = 16, designClientWidth = 750) {
 }
 
 export default function responsive (rootFontSize = 16, designWidth = 750) {
-  metaFlex(rootFontSize, designWidth)
-}
-
-function unusual () {
-  if (navigator.appVersion.match(/(iphone|ipad|ipod)/ig)) {
-    return false
-  }
-
-  let userAgent = navigator.userAgent
-  let webKitVersionMatch = userAgent.match(/Android[\S\s]+AppleWebkit\/(\d{3})/i)
-  if (webKitVersionMatch && webKitVersionMatch[1] > 534) {
-    return false
-  }
-
-  let UCVersionMatch = navigator.userAgent.match(/U3\/((\d+|\.){5,})/i)
-
-  if (UCVersionMatch) {
-    let UCVersion = parseInt(UCVersionMatch[1].split('.').join(''), 10)
-    if (UCVersion < 80) {
-      return true
-    }
-  }
-
-  return false
+  return metaFlex(rootFontSize, designWidth)
 }
