@@ -62,7 +62,7 @@ export default class Stage {
     this.camera.updateMatrix()
     this.camera.updateMatrixWorld(false)
 
-    var frustum = new Frustum()
+    let frustum = new Frustum()
     frustum.setFromMatrix(new Matrix4().multiplyMatrices(this.camera.projectionMatrix, this.camera.matrixWorldInverse))
 
     return frustum.intersectsObject(object) === false

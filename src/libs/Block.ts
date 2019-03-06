@@ -69,7 +69,7 @@ export default class Block {
     this.moving = true
   }
 
-  public drop () {
+  public drop (): void {
     this.dropping = true
   }
 
