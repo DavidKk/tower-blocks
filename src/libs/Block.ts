@@ -1,8 +1,24 @@
 import pick from 'lodash/pick'
 import defaults from 'lodash/defaults'
 import { BoxGeometry, MeshLambertMaterial, Mesh } from 'three'
+import { BlockDirection, BlockOptions } from '../types'
 
 export default class Block {
+  public moving: boolean
+  public dropping: boolean
+  public direction: keyof typeof BlockDirection
+  public speed: number
+  public color: number
+  public geometry: BoxGeometry
+  public material: MeshLambertMaterial
+  public mesh: Mesh
+  private moveXStart: number
+  private moveXEnd: number
+  private moveZStart: number
+  private moveZEnd: number
+  private v: number = 0
+  static g: number = 0.098
+
   get dimension () {
     let { width, height, depth } = this.geometry.parameters
     return { width, height, depth }
@@ -25,13 +41,13 @@ export default class Block {
     return this.direction === 'x' ? this.moveXEnd : this.moveZEnd
   }
 
-  constructor (props = {}) {
+  constructor (props: BlockOptions = {}) {
     let position = defaults({}, props.position, { x: 0, y: 0, z: 0 })
     let dimension = defaults({}, props.dimension, { width: 10, height: 1, depth: 10 })
 
     this.moving = props.hasOwnProperty('moving') ? props.moving : false
     this.dropping = props.hasOwnProperty('dropping') ? props.dropping : false
-    this.direction = props.hasOwnProperty('direction') ? props.direction : 'x'
+    this.direction = props.hasOwnProperty('direction') ? props.direction : BlockDirection.x
     this.speed = props.hasOwnProperty('speed') ? props.speed : 0.2
     this.moveXStart = props.hasOwnProperty('moveXStart') ? props.moveXStart : position.x - 12
     this.moveXEnd = props.hasOwnProperty('moveXEnd') ? props.moveXEnd : position.x + 12
@@ -47,29 +63,26 @@ export default class Block {
     this.mesh.position.x = position.x
     this.mesh.position.y = position.y
     this.mesh.position.z = position.z
-
-    this.v = 0
-    this.g = 0.098
   }
 
-  move () {
+  public move () {
     this.moving = true
   }
 
-  drop () {
+  public drop () {
     this.dropping = true
   }
 
-  stop () {
+  public stop () {
     this.moving = false
     this.dropping = false
   }
 
-  reverseDirection () {
+  public reverseDirection () {
     this.speed *= -1
   }
 
-  nextTick () {
+  public nextTick () {
     if (this.moving === true) {
       let pos = this.mesh.position
       if (pos[this.direction] < this.moveStart || pos[this.direction] > this.moveEnd) {
@@ -79,7 +92,7 @@ export default class Block {
       pos[this.direction] += this.speed
     } else if (this.dropping === true) {
       this.mesh.position.y -= this.v
-      this.v += this.g
+      this.v += Block.g
     }
   }
 }

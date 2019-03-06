@@ -1,7 +1,10 @@
-import Stats from 'stats-js'
-import { getRootFontSize } from './responsive'
+import Stats from 'stats.js'
+import { getRootFontSize } from '../services/responsive'
 
 export default class DevTool {
+  stats: Stats
+  isCheat: boolean
+
   constructor () {
     if (process.env.NODE_ENV === 'development') {
       this.stats = new Stats()
@@ -16,11 +19,11 @@ export default class DevTool {
     this.isCheat = process.env.NODE_ENV === 'development' && -1 !== window.location.search.search('c=whoesyourdady')
   }
 
-  cheat (isCheat) {
-    this.isCheat = process.env.NODE_ENV === 'development' ? false : !!isCheat
+  cheat (isCheat: boolean): void {
+    this.isCheat = process.env.NODE_ENV === 'development' ? false : isCheat
   }
 
-  resize () {
+  resize (): void {
     if (this.stats) {
       let rootFontSize = getRootFontSize()
 
@@ -33,11 +36,11 @@ export default class DevTool {
     }
   }
 
-  begin () {
+  begin (): void {
     this.stats && this.stats.begin()
   }
 
-  end () {
+  end (): void {
     this.stats && this.stats.end()
   }
 }

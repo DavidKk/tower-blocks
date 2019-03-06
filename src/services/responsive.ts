@@ -1,14 +1,17 @@
 import map from 'lodash/map'
 import fromPairs from 'lodash/fromPairs'
 
-export function unusual () {
+export const RootFontSize = 16
+export const DesignClientWidth = 750
+
+export function unusual (): boolean {
   if (navigator.appVersion.match(/(iphone|ipad|ipod)/ig)) {
     return false
   }
 
   let userAgent = navigator.userAgent
   let webKitVersionMatch = userAgent.match(/Android[\S\s]+AppleWebkit\/(\d{3})/i)
-  if (webKitVersionMatch && webKitVersionMatch[1] > 534) {
+  if (webKitVersionMatch && parseInt(webKitVersionMatch[1], 10) > 534) {
     return false
   }
 
@@ -24,7 +27,7 @@ export function unusual () {
   return false
 }
 
-export function getRootFontSize (rootFontSize = 16, designClientWidth = 750) {
+export function getRootFontSize (rootFontSize = RootFontSize, designClientWidth = DesignClientWidth): number {
   let meta = document.querySelector('meta[name="viewport"]')
 
   if (!meta) {
@@ -53,18 +56,17 @@ export function getRootFontSize (rootFontSize = 16, designClientWidth = 750) {
     : rootFontSize / flexRatio * window.devicePixelRatio
 }
 
-export function metaFlex (rootFontSize = 16, designClientWidth = 750) {
+export function metaFlex (rootFontSize = RootFontSize, designClientWidth = DesignClientWidth) {
   let docElement = document.documentElement
-
   docElement.style.fontSize = `${getRootFontSize(rootFontSize, designClientWidth)}px`
   docElement.style.display = 'none'
 
   // Force rerender - important to new Android devices
-  // eslint-disable-next-line no-unused-expressions
+  // tslint:disable-next-line no-unused-expression
   docElement.clientWidth
   docElement.style.display = ''
 }
 
-export default function responsive (rootFontSize = 16, designWidth = 750) {
+export default function responsive (rootFontSize = RootFontSize, designWidth = DesignClientWidth) {
   return metaFlex(rootFontSize, designWidth)
 }

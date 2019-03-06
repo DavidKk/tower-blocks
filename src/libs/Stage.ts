@@ -1,22 +1,23 @@
 import {
   OrthographicCamera, SpotLight, Scene,
-  CanvasRenderer, WebGLRenderer,
-  Vector3, Frustum, Matrix4
+  WebGLRenderer,
+  Vector3, Frustum, Matrix4, Object3D
 } from 'three'
 
-let isSupport = (() => {
-  try {
-    let canvas = document.createElement('canvas')
-    return !!(window.WebGLRenderingContext && (canvas.getContext('webgl') || canvas.getContext('experimental-webgl')))
-  } catch (error) {
-    return false
-  }
-})()
-
 export default class Stage {
+  private scene: Scene
+  private viewSize: number
+  private camera: OrthographicCamera
+  private light: SpotLight
+  private renderer: WebGLRenderer
+  private spinner: HTMLElement
+  private score: HTMLElement
+  private play: HTMLElement
+  private message: HTMLElement
+  private canvas: HTMLElement
+
   constructor () {
     this.scene = new Scene()
-
     this.viewSize = 30
 
     let aspect = window.innerWidth / window.innerHeight
@@ -33,10 +34,7 @@ export default class Stage {
     this.light.shadow.mapSize.height = 2048
     this.scene.add(this.light)
 
-    this.renderer = isSupport
-      ? new WebGLRenderer({ antialias: true, alpha: true })
-      : new CanvasRenderer({ antialias: true, alpha: true })
-
+    this.renderer = new WebGLRenderer({ antialias: true, alpha: true })
     this.renderer.setSize(window.innerWidth, window.innerHeight)
 
     this.spinner = document.getElementById('spinner')
@@ -56,20 +54,21 @@ export default class Stage {
     this.toggleSpinner(false)
   }
 
-  _toggleElement (element, isOpen = true) {
+  private toggleElement (element: HTMLElement, isOpen: boolean = true) {
     isOpen === true ? element.classList.add('in') : element.classList.remove('in')
   }
 
-  detectOffScreen (object) {
+  public detectOffScreen (object: Object3D) {
     this.camera.updateMatrix()
-    this.camera.updateMatrixWorld()
+    this.camera.updateMatrixWorld(false)
+
     var frustum = new Frustum()
     frustum.setFromMatrix(new Matrix4().multiplyMatrices(this.camera.projectionMatrix, this.camera.matrixWorldInverse))
 
     return frustum.intersectsObject(object) === false
   }
 
-  resize () {
+  public resize () {
     let aspect = window.innerWidth / window.innerHeight
     this.renderer.setSize(window.innerWidth, window.innerHeight)
     this.camera.left = -this.viewSize * aspect
@@ -79,31 +78,31 @@ export default class Stage {
     this.camera.updateProjectionMatrix()
   }
 
-  add (element) {
+  public add (element: Object3D) {
     this.scene.add(element)
   }
 
-  render () {
+  public render () {
     this.renderer.render(this.scene, this.camera)
   }
 
-  togglePlay (isOpen = true) {
-    return this._toggleElement(this.play, isOpen)
+  public setScore (score: number) {
+    this.score.innerText = score * 100 + ''
   }
 
-  toggleSpinner (isOpen = true) {
-    return this._toggleElement(this.spinner, isOpen)
-  }
-
-  toggleMessage (isOpen = true) {
-    return this._toggleElement(this.message, isOpen)
-  }
-
-  setScore (score) {
-    this.score.innerText = score * 100
-  }
-
-  setMessage (message) {
+  public setMessage (message: string) {
     this.message.innerText = message
+  }
+
+  public togglePlay (isOpen: boolean = true) {
+    return this.toggleElement(this.play, isOpen)
+  }
+
+  public toggleSpinner (isOpen: boolean = true) {
+    return this.toggleElement(this.spinner, isOpen)
+  }
+
+  public toggleMessage (isOpen: boolean = true) {
+    return this.toggleElement(this.message, isOpen)
   }
 }

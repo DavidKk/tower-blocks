@@ -1,11 +1,17 @@
 import defaultsDeep from 'lodash/defaultsDeep'
 import { Group, Color } from 'three'
-import DevTool from './DevTool'
-import Stage from './Stage'
 import Block from './Block'
-import { isMobile } from './device'
+import Stage from './Stage'
+import DevTool from './DevTool'
+import {
+  TouchEventHandle,
+  BlockDirection,
+  BlockOptions,
+  BlockPosition
+} from '../types'
+import { isMobile } from '../share/device'
 
-export class Game {
+export default class Game {
   static offsetColor = Math.round(Math.random() * 100)
   static movingRanges = {
     moveXStart: -12,
@@ -13,6 +19,27 @@ export class Game {
     moveZStart: -12,
     moveZEnd: 12
   }
+
+  private playing: boolean
+  private finished: boolean
+  private missed: boolean
+  private index: number
+  private score: number
+  private blocks: Array<Block>
+  private movingBlock: Block
+  private dropBlock: Block
+  private topBlock: Block
+  private movingSpeed: number
+  private viewMaxY: number
+  private viewOffsetY: number
+  private devTool: DevTool
+  private stage: Stage
+  private moves: Group
+  private drops: Group
+  private chops: Group
+  private handleKeyDown: TouchEventHandle
+  private handleClick: TouchEventHandle
+  private handleTouch: TouchEventHandle
 
   constructor () {
     this.playing = false
@@ -45,7 +72,7 @@ export class Game {
     this.topBlock = this.addChoppedBlock()
   }
 
-  _genOffsetColor (zIndex) {
+  private genOffsetColor (zIndex: number) {
     let offset = zIndex + Game.offsetColor
     let r = Math.sin(0.3 * offset) * 55 + 200
     let g = Math.sin(0.3 * offset + 2) * 55 + 200
@@ -53,8 +80,8 @@ export class Game {
     return new Color(r / 255, g / 255, b / 255)
   }
 
-  initController () {
-    this.handleKeyDown = (event) => event && event.keyCode === 32 && this.onActions()
+  private initController () {
+    this.handleKeyDown = (event) => event instanceof KeyboardEvent && event.keyCode === 32 && this.onActions()
     this.handleClick = () => this.onActions()
     this.handleTouch = () => this.onActions()
 
@@ -66,10 +93,26 @@ export class Game {
     }
   }
 
-  addBlock (props = {}) {
+  private onActions () {
+    if (this.playing === true) {
+      this.crop()
+      return
+    }
+
+    if (this.finished === true) {
+      this.reset()
+      return
+    }
+
+    if (this.playing === false && this.finished === false) {
+      this.start()
+    }
+  }
+
+  public addBlock (props: BlockOptions = {}) {
     let direction = this.index % 2 ? 'x' : 'z'
     let position = { x: 0, y: this.index, z: 0 }
-    let color = this._genOffsetColor(position.y)
+    let color = this.genOffsetColor(position.y)
     let speed = this.movingSpeed + this.index * 0.005
     let options = defaultsDeep({}, props, { position, direction, color, speed, ...Game.movingRanges })
 
@@ -77,7 +120,7 @@ export class Game {
     return new Block(options)
   }
 
-  addChoppedBlock (props = {}) {
+  public addChoppedBlock (props: BlockOptions = {}) {
     let block = this.addBlock({ ...props })
 
     this.chops.add(block.mesh)
@@ -86,7 +129,7 @@ export class Game {
     return block
   }
 
-  delChoppedBlock (block) {
+  public delChoppedBlock (block: Block) {
     let index = this.blocks.indexOf(block)
     if (index !== -1) {
       this.blocks.splice(index, 1)
@@ -97,7 +140,7 @@ export class Game {
     return false
   }
 
-  addMovingBlock (props = {}) {
+  public addMovingBlock (props: BlockOptions = {}) {
     let moving = this.devTool.isCheat === true ? false : true
     let block = this.addBlock({ ...props, moving })
 
@@ -107,7 +150,7 @@ export class Game {
     return block
   }
 
-  delMovingBlock (block) {
+  public delMovingBlock (block: Block) {
     let index = this.blocks.indexOf(block)
     if (index !== -1) {
       this.blocks.splice(index, 1)
@@ -118,7 +161,7 @@ export class Game {
     return false
   }
 
-  addDropedBlock (props = {}) {
+  public addDropedBlock (props: BlockOptions = {}) {
     let block = this.addBlock({ ...props, dropping: true })
 
     this.drops.add(block.mesh)
@@ -127,7 +170,7 @@ export class Game {
     return block
   }
 
-  delDroppedBlock (block) {
+  public delDroppedBlock (block: Block) {
     let index = this.blocks.indexOf(block)
     if (index !== -1) {
       this.blocks.splice(index, 1)
@@ -138,7 +181,7 @@ export class Game {
     return false
   }
 
-  crop () {
+  public crop () {
     if (this.topBlock && this.movingBlock) {
       let axis = this.movingBlock.direction
       let size = axis === 'x' ? 'width' : 'depth'
@@ -215,7 +258,7 @@ export class Game {
     }
   }
 
-  start () {
+  public start () {
     if (this.playing === true) {
       return
     }
@@ -225,10 +268,10 @@ export class Game {
     this.topBlock = this.addChoppedBlock()
     this.index++
 
-    let direction = this.index % 2 ? 'x' : 'z'
+    let direction = this.index % 2 ? BlockDirection.x : BlockDirection.z
     let randomKey = Math.round(Math.random())
-    let position = {
-      [direction]: direction === 'x'
+    let position: BlockPosition = {
+      [direction]: direction === BlockDirection.x
         ? [Game.movingRanges.moveXStart, Game.movingRanges.moveXEnd][randomKey]
         : [Game.movingRanges.moveZStart, Game.movingRanges.moveZEnd][randomKey]
     }
@@ -241,7 +284,7 @@ export class Game {
     this.playing = true
   }
 
-  end () {
+  public end () {
     let { dimension, position } = this.movingBlock
     this.delMovingBlock(this.movingBlock)
     this.dropBlock = this.addDropedBlock({ dimension, position })
@@ -253,12 +296,12 @@ export class Game {
     this.stage.toggleMessage(true)
   }
 
-  lose () {
+  public lose () {
     this.end()
     this.missed = true
   }
 
-  reset () {
+  public reset () {
     return new Promise((resolve) => {
       this.blocks.forEach((block) => {
         block.moving = false
@@ -292,23 +335,7 @@ export class Game {
     })
   }
 
-  onActions () {
-    if (this.playing === true) {
-      this.crop()
-      return
-    }
-
-    if (this.finished === true) {
-      this.reset()
-      return
-    }
-
-    if (this.playing === false && this.finished === false) {
-      this.start()
-    }
-  }
-
-  nextTick () {
+  public nextTick () {
     this.devTool.begin()
 
     this.stage.render()
@@ -324,7 +351,7 @@ export class Game {
     requestAnimationFrame(this.nextTick)
   }
 
-  destory () {
+  public destory () {
     document.removeEventListener('keydown', this.handleKeyDown)
     document.removeEventListener('click', this.handleClick)
     document.removeEventListener('touchstart', this.handleTouch)
@@ -334,5 +361,3 @@ export class Game {
     this.handleTouch = undefined
   }
 }
-
-export default new Game()
