@@ -65,7 +65,7 @@ export default class Block {
     this.mesh.position.z = position.z
   }
 
-  public move () {
+  public move (): void {
     this.moving = true
   }
 
