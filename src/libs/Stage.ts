@@ -54,11 +54,11 @@ export default class Stage {
     this.toggleSpinner(false)
   }
 
-  private toggleElement (element: HTMLElement, isOpen: boolean = true) {
+  private toggleElement (element: HTMLElement, isOpen: boolean = true): void {
     isOpen === true ? element.classList.add('in') : element.classList.remove('in')
   }
 
-  public detectOffScreen (object: Object3D) {
+  public detectOffScreen (object: Object3D): boolean {
     this.camera.updateMatrix()
     this.camera.updateMatrixWorld(false)
 
@@ -68,7 +68,7 @@ export default class Stage {
     return frustum.intersectsObject(object) === false
   }
 
-  public resize () {
+  public resize (): void {
     let aspect = window.innerWidth / window.innerHeight
     this.renderer.setSize(window.innerWidth, window.innerHeight)
     this.camera.left = -this.viewSize * aspect
@@ -78,31 +78,31 @@ export default class Stage {
     this.camera.updateProjectionMatrix()
   }
 
-  public add (element: Object3D) {
+  public add (element: Object3D): void {
     this.scene.add(element)
   }
 
-  public render () {
+  public render (): void {
     this.renderer.render(this.scene, this.camera)
   }
 
-  public setScore (score: number) {
+  public setScore (score: number): void {
     this.score.innerText = score * 100 + ''
   }
 
-  public setMessage (message: string) {
+  public setMessage (message: string): void {
     this.message.innerText = message
   }
 
-  public togglePlay (isOpen: boolean = true) {
+  public togglePlay (isOpen: boolean = true): void {
     return this.toggleElement(this.play, isOpen)
   }
 
-  public toggleSpinner (isOpen: boolean = true) {
+  public toggleSpinner (isOpen: boolean = true): void {
     return this.toggleElement(this.spinner, isOpen)
   }
 
-  public toggleMessage (isOpen: boolean = true) {
+  public toggleMessage (isOpen: boolean = true): void {
     return this.toggleElement(this.message, isOpen)
   }
 }

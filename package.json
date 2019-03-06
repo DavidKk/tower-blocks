@@ -12,12 +12,13 @@
     "lint-staged"
   ],
   "lint-staged": {
-    "*": [
+    "*.{ts,tsx}": [
       "npm run lint",
       "git add"
     ]
   },
   "scripts": {
+    "lint-staged": "lint-staged",
     "tslint": "tslint --config ./tslint.json --fix './src/**/*.ts'",
     "lint": "npm run tslint",
     "develop": "parcel ./src/index.html",

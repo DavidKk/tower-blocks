@@ -72,7 +72,7 @@ export default class Game {
     this.topBlock = this.addChoppedBlock()
   }
 
-  private genOffsetColor (zIndex: number): void {
+  private genOffsetColor (zIndex: number): Color {
     let offset = zIndex + Game.offsetColor
     let r = Math.sin(0.3 * offset) * 55 + 200
     let g = Math.sin(0.3 * offset + 2) * 55 + 200
@@ -93,7 +93,7 @@ export default class Game {
     }
   }
 
-  private onActions () {
+  private onActions (): void {
     if (this.playing === true) {
       this.crop()
       return
@@ -109,7 +109,7 @@ export default class Game {
     }
   }
 
-  public addBlock (props: BlockOptions = {}) {
+  public addBlock (props: BlockOptions = {}): Block {
     let direction = this.index % 2 ? 'x' : 'z'
     let position = { x: 0, y: this.index, z: 0 }
     let color = this.genOffsetColor(position.y)
@@ -120,7 +120,7 @@ export default class Game {
     return new Block(options)
   }
 
-  public addChoppedBlock (props: BlockOptions = {}) {
+  public addChoppedBlock (props: BlockOptions = {}): Block {
     let block = this.addBlock({ ...props })
 
     this.chops.add(block.mesh)
@@ -129,7 +129,7 @@ export default class Game {
     return block
   }
 
-  public delChoppedBlock (block: Block) {
+  public delChoppedBlock (block: Block): boolean {
     let index = this.blocks.indexOf(block)
     if (index !== -1) {
       this.blocks.splice(index, 1)
@@ -140,7 +140,7 @@ export default class Game {
     return false
   }
 
-  public addMovingBlock (props: BlockOptions = {}) {
+  public addMovingBlock (props: BlockOptions = {}): Block {
     let moving = this.devTool.isCheat === true ? false : true
     let block = this.addBlock({ ...props, moving })
 
@@ -150,7 +150,7 @@ export default class Game {
     return block
   }
 
-  public delMovingBlock (block: Block) {
+  public delMovingBlock (block: Block): boolean {
     let index = this.blocks.indexOf(block)
     if (index !== -1) {
       this.blocks.splice(index, 1)
@@ -161,7 +161,7 @@ export default class Game {
     return false
   }
 
-  public addDropedBlock (props: BlockOptions = {}) {
+  public addDropedBlock (props: BlockOptions = {}): Block {
     let block = this.addBlock({ ...props, dropping: true })
 
     this.drops.add(block.mesh)
@@ -170,7 +170,7 @@ export default class Game {
     return block
   }
 
-  public delDroppedBlock (block: Block) {
+  public delDroppedBlock (block: Block): boolean {
     let index = this.blocks.indexOf(block)
     if (index !== -1) {
       this.blocks.splice(index, 1)
@@ -181,7 +181,7 @@ export default class Game {
     return false
   }
 
-  public crop () {
+  public crop (): void {
     if (this.topBlock && this.movingBlock) {
       let axis = this.movingBlock.direction
       let size = axis === 'x' ? 'width' : 'depth'
@@ -258,7 +258,7 @@ export default class Game {
     }
   }
 
-  public start () {
+  public start (): void {
     if (this.playing === true) {
       return
     }
@@ -284,7 +284,7 @@ export default class Game {
     this.playing = true
   }
 
-  public end () {
+  public end (): void {
     let { dimension, position } = this.movingBlock
     this.delMovingBlock(this.movingBlock)
     this.dropBlock = this.addDropedBlock({ dimension, position })
@@ -296,12 +296,12 @@ export default class Game {
     this.stage.toggleMessage(true)
   }
 
-  public lose () {
+  public lose (): void {
     this.end()
     this.missed = true
   }
 
-  public reset () {
+  public reset (): Promise<void> {
     return new Promise((resolve) => {
       this.blocks.forEach((block) => {
         block.moving = false
@@ -335,7 +335,7 @@ export default class Game {
     })
   }
 
-  public nextTick () {
+  public nextTick (): void {
     this.devTool.begin()
 
     this.stage.render()
@@ -351,7 +351,7 @@ export default class Game {
     requestAnimationFrame(this.nextTick)
   }
 
-  public destory () {
+  public destory (): void {
     document.removeEventListener('keydown', this.handleKeyDown)
     document.removeEventListener('click', this.handleClick)
     document.removeEventListener('touchstart', this.handleTouch)
