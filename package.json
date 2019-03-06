@@ -21,7 +21,9 @@
     "lint-staged": "lint-staged",
     "tslint": "tslint --config ./tslint.json --fix './src/**/*.ts'",
     "lint": "npm run tslint",
-    "develop": "parcel ./src/index.html",
+    "test": "npm run lint",
+    "develop": "rimraf ./dist ./.cache && parcel ./src/index.html",
+    "release": "rimraf ./dist ./.cache && parcel build ./src/index.html --public-url /tower-blocks/",
     "start": "npm run develop"
   },
   "devDependencies": {
@@ -29,6 +31,7 @@
     "parcel-bundler": "^1.11.0",
     "postcss-pxtorem": "^4.0.1",
     "pre-commit": "^1.2.2",
+    "rimraf": "^2.6.3",
     "sass": "^1.16.0",
     "tslint": "^5.12.1",
     "tslint-config-standard": "^8.0.1",
