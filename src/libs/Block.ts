@@ -73,16 +73,16 @@ export default class Block {
     this.dropping = true
   }
 
-  public stop () {
+  public stop (): void {
     this.moving = false
     this.dropping = false
   }
 
-  public reverseDirection () {
+  public reverseDirection (): void {
     this.speed *= -1
   }
 
-  public nextTick () {
+  public nextTick (): void {
     if (this.moving === true) {
       let pos = this.mesh.position
       if (pos[this.direction] < this.moveStart || pos[this.direction] > this.moveEnd) {
