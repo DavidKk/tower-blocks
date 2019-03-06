@@ -10,7 +10,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "echo hello world"
+      "pre-commit": "npm run lint"
     }
   },
   "lint-staged": {
