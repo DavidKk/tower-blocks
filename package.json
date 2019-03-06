@@ -2,7 +2,7 @@
   "name": "tower-blocks",
   "description": "Tower Blocks Game",
   "version": "1.0.0",
-  "main": "index.js",
+  "author": "DavidJones <qowera@qq.com>",
   "license": "MIT",
   "repository": {
     "type": "git",
