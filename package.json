@@ -8,11 +8,9 @@
     "type": "git",
     "url": "git@bitbucket.org:dkk/tower-blocks.git"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm run lint"
-    }
-  },
+  "pre-commit": [
+    "lint-staged"
+  ],
   "lint-staged": {
     "*": [
       "npm run lint",
@@ -26,10 +24,10 @@
     "start": "npm run develop"
   },
   "devDependencies": {
-    "husky": "^0.14.3",
     "lint-staged": "^7.2.2",
     "parcel-bundler": "^1.11.0",
     "postcss-pxtorem": "^4.0.1",
+    "pre-commit": "^1.2.2",
     "sass": "^1.16.0",
     "tslint": "^5.12.1",
     "tslint-config-standard": "^8.0.1",
