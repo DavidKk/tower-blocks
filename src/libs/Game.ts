@@ -72,7 +72,7 @@ export default class Game {
     this.topBlock = this.addChoppedBlock()
   }
 
-  private genOffsetColor (zIndex: number) {
+  private genOffsetColor (zIndex: number): void {
     let offset = zIndex + Game.offsetColor
     let r = Math.sin(0.3 * offset) * 55 + 200
     let g = Math.sin(0.3 * offset + 2) * 55 + 200
