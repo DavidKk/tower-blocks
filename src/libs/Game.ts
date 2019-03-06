@@ -80,7 +80,7 @@ export default class Game {
     return new Color(r / 255, g / 255, b / 255)
   }
 
-  private initController () {
+  private initController (): void {
     this.handleKeyDown = (event) => event instanceof KeyboardEvent && event.keyCode === 32 && this.onActions()
     this.handleClick = () => this.onActions()
     this.handleTouch = () => this.onActions()
