@@ -42,6 +42,7 @@
     "@types/lodash": "^4.14.121",
     "@types/stats.js": "^0.17.0",
     "@types/three": "^0.93.22",
+    "stats.js": "^0.17.0",
     "three": "^0.102.0"
   }
 }

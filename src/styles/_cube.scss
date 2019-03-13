@@ -52,7 +52,7 @@
   transform: translateZ($cubeSize / 2 * -1); 
 }
 
-.cube.fade:not(.in) > .cube-face {
+.cube.fade:not(.out) > .cube-face {
   opacity: 0;
 }
 

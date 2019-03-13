@@ -10,7 +10,6 @@ export default class Stage {
   private camera: OrthographicCamera
   private light: SpotLight
   private renderer: WebGLRenderer
-  private spinner: HTMLElement
   private score: HTMLElement
   private play: HTMLElement
   private message: HTMLElement
@@ -37,7 +36,6 @@ export default class Stage {
     this.renderer = new WebGLRenderer({ antialias: true, alpha: true })
     this.renderer.setSize(window.innerWidth, window.innerHeight)
 
-    this.spinner = document.getElementById('spinner')
     this.score = document.getElementById('score')
     this.play = document.getElementById('play')
     this.message = document.getElementById('message')
@@ -51,7 +49,6 @@ export default class Stage {
     this.play.style.display = 'block'
 
     document.body.appendChild(this.canvas)
-    this.toggleSpinner(false)
   }
 
   private toggleElement (element: HTMLElement, isOpen: boolean = true): void {
@@ -96,10 +93,6 @@ export default class Stage {
 
   public togglePlay (isOpen: boolean = true): void {
     return this.toggleElement(this.play, isOpen)
-  }
-
-  public toggleSpinner (isOpen: boolean = true): void {
-    return this.toggleElement(this.spinner, isOpen)
   }
 
   public toggleMessage (isOpen: boolean = true): void {
