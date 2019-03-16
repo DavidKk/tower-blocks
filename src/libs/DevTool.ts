@@ -1,5 +1,5 @@
 import Stats from 'stats.js'
-import { getRootFontSize } from '../services/responsive'
+import { RootFontSize } from '../services/responsive'
 
 export default class DevTool {
   stats: Stats
@@ -25,12 +25,10 @@ export default class DevTool {
 
   resize (): void {
     if (this.stats) {
-      let rootFontSize = getRootFontSize()
-
       Array.prototype.forEach.call(this.stats.dom.children, (canvas) => {
         if (canvas.tagName && canvas.tagName.toLowerCase() === 'canvas') {
-          canvas.style.width = `${canvas.width / rootFontSize}rem`
-          canvas.style.height = `${canvas.height / rootFontSize}rem`
+          canvas.style.width = `${canvas.width / RootFontSize}rem`
+          canvas.style.height = `${canvas.height / RootFontSize}rem`
         }
       })
     }

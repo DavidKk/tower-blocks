@@ -22,7 +22,7 @@
     "tslint": "tslint --config ./tslint.json --fix './src/**/*.ts'",
     "lint": "npm run tslint",
     "test": "npm run lint",
-    "develop": "rimraf ./dist ./.cache && parcel ./src/index.html",
+    "develop": "rimraf ./dist ./.cache && parcel ./src/index.html --no-hmr",
     "release": "rimraf ./dist ./.cache && parcel build ./src/index.html --public-url /tower-blocks/",
     "start": "npm run develop"
   },
@@ -30,6 +30,7 @@
     "@types/node": "^11.10.5",
     "lint-staged": "^7.2.2",
     "parcel-bundler": "^1.11.0",
+    "parcel-plugin-bundle-manifest": "^0.2.0",
     "postcss-pxtorem": "^4.0.1",
     "pre-commit": "^1.2.2",
     "rimraf": "^2.6.3",

@@ -1,7 +1,10 @@
+import { isWeChat } from '../share/device'
+import { createCanvas } from '../share/adapter'
 import { pxToRem } from '../share/styles'
 
 export default class UI {
   private canvas: HTMLCanvasElement
+  private offScreenCanvas: HTMLCanvasElement
   private context: CanvasRenderingContext2D
   private score: number
   private message: string
@@ -13,7 +16,7 @@ export default class UI {
   private messageTransitionToken: Symbol
   private transitions: Array<Symbol>
 
-  constructor () {
+  constructor (canvas?: HTMLCanvasElement) {
     this.score = 0
     this.playButtonVisible = true
     this.playButtonOpacity = 100
@@ -21,18 +24,13 @@ export default class UI {
     this.messageOpacity = 0
     this.transitions = []
 
-    this.canvas = document.createElement('canvas')
+    this.canvas = canvas || createCanvas()
     this.context = this.canvas.getContext('2d')
 
-    this.canvas.style.position = 'fixed'
-    this.canvas.style.top = '0'
-    this.canvas.style.left = '0'
-    this.canvas.style.zIndex = '40000'
-
-    document.body.append(this.canvas)
-
-    window.addEventListener('resize', this.resize.bind(this))
-    this.resize()
+    if (!isWeChat) {
+      window.addEventListener('resize', this.resize.bind(this))
+      this.resize()
+    }
 
     this.togglePlayButton(true)
   }
@@ -88,7 +86,11 @@ export default class UI {
   }
 
   public render (): void {
-    this.context.clearRect(0, 0, window.innerWidth, window.innerHeight)
+    let screenWidth = window.innerWidth
+    let screenHeight = window.innerHeight
+
+    this.context.clearRect(0, 0, screenWidth, screenHeight)
+    this.offScreenCanvas && this.context.drawImage(this.offScreenCanvas, 0, 0, screenWidth, screenHeight)
 
     this.drawScore(this.score)
     this.messageVisible === true && this.drawMessage(this.message)
@@ -108,7 +110,7 @@ export default class UI {
     let textX = window.innerWidth / 2
     let textY = window.innerHeight * 0.9
 
-    this.context.font = `bold ${pxToRem(48)}rem 微软雅黑`
+    this.context.font = `bold ${pxToRem(48)} 微软雅黑`
     this.context.textAlign = 'center'
     this.context.textBaseline = 'middle'
     this.context.fillStyle = textColor
@@ -124,7 +126,7 @@ export default class UI {
     let textX = window.innerWidth / 2
     let textY = window.innerHeight * 0.1
 
-    this.context.font = `bold ${pxToRem(48)}rem 微软雅黑`
+    this.context.font = `bold ${pxToRem(48)} 微软雅黑`
     this.context.textAlign = 'center'
     this.context.textBaseline = 'middle'
     this.context.fillStyle = textColor
@@ -146,7 +148,7 @@ export default class UI {
     let textX = window.innerWidth / 2
     let textY = window.innerHeight / 2
 
-    this.context.font = `bold ${pxToRem(96)}rem 微软雅黑`
+    this.context.font = `bold ${pxToRem(96)} 微软雅黑`
     this.context.textAlign = 'center'
     this.context.textBaseline = 'middle'
     this.context.fillStyle = textColor
@@ -205,5 +207,13 @@ export default class UI {
 
     elapsed --
     return -amountOfChange / 2 * (elapsed * (elapsed - 2) - 1) + initialValue
+  }
+
+  public getCanvas (): HTMLCanvasElement {
+    return this.canvas
+  }
+
+  public setOffScreenCanvas (canvas: HTMLCanvasElement) {
+    this.offScreenCanvas = canvas
   }
 }

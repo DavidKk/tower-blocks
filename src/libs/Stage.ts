@@ -3,24 +3,27 @@ import {
   WebGLRenderer,
   Vector3, Frustum, Matrix4, Object3D
 } from 'three'
+import { createCanvas } from '../share/adapter'
+import { isWeChat } from '../share/device'
 
 export default class Stage {
-  private scene: Scene
-  private viewSize: number
-  private camera: OrthographicCamera
-  private light: SpotLight
-  private renderer: WebGLRenderer
   private canvas: HTMLCanvasElement
+  private viewSize: number
+  private renderer: WebGLRenderer
+  private light: SpotLight
+  private scene: Scene
+  private camera: OrthographicCamera
 
-  constructor () {
-    this.scene = new Scene()
+  constructor (canvas?: HTMLCanvasElement) {
     this.viewSize = 30
+    this.scene = new Scene()
 
-    let aspect = window.innerWidth / window.innerHeight
+    let screenWidth = window.innerWidth
+    let screenHeight = window.innerHeight
+    let aspect = screenWidth / screenHeight
+
     this.camera = new OrthographicCamera(-this.viewSize * aspect, this.viewSize * aspect, this.viewSize, -this.viewSize, -100, 1000)
-    this.camera.position.x = 2
-    this.camera.position.y = 2
-    this.camera.position.z = 2
+    this.camera.position.set(2, 2, 2)
     this.camera.lookAt(new Vector3(0, 0, 0))
 
     this.light = new SpotLight(0xffffff, 1)
@@ -30,15 +33,16 @@ export default class Stage {
     this.light.shadow.mapSize.height = 2048
     this.scene.add(this.light)
 
-    this.canvas = document.createElement('canvas')
+    this.canvas = canvas || createCanvas()
     this.renderer = new WebGLRenderer({ canvas: this.canvas, antialias: true, alpha: true })
-    this.renderer.setSize(window.innerWidth, window.innerHeight)
+    this.renderer.setSize(screenWidth, screenHeight)
 
-    window.addEventListener('resize', this.resize.bind(this))
-    this.resize()
-
-    document.body.style.backgroundColor = '#d0cbc7'
-    document.body.appendChild(this.canvas)
+    if (isWeChat) {
+      this.renderer.setClearColor(0xd0cbc7, 1)
+    } else {
+      window.addEventListener('resize', this.resize.bind(this))
+      this.resize()
+    }
   }
 
   public add (element: Object3D): void {
@@ -67,5 +71,9 @@ export default class Stage {
     frustum.setFromMatrix(new Matrix4().multiplyMatrices(this.camera.projectionMatrix, this.camera.matrixWorldInverse))
 
     return frustum.intersectsObject(object) === false
+  }
+
+  public getCanvas (): HTMLCanvasElement {
+    return this.canvas
   }
 }

@@ -10,7 +10,8 @@ import {
   BlockOptions,
   BlockPosition
 } from '../types'
-import { isMobile } from '../share/device'
+import { createCanvas, bindTapEvent, unbindTapEvent } from '../share/adapter'
+import { isMobile, isWeChat } from '../share/device'
 
 export default class Game {
   static offsetColor = Math.round(Math.random() * 100)
@@ -33,6 +34,7 @@ export default class Game {
   private movingSpeed: number
   private viewMaxY: number
   private viewOffsetY: number
+  private canvas: HTMLCanvasElement
   private devTool: DevTool
   private stage: Stage
   private ui: UI
@@ -40,7 +42,6 @@ export default class Game {
   private drops: Group
   private chops: Group
   private handleKeyDown: TouchEventHandle
-  private handleClick: TouchEventHandle
   private handleTouch: TouchEventHandle
 
   constructor () {
@@ -56,9 +57,19 @@ export default class Game {
     this.viewMaxY = 30
     this.viewOffsetY = -15
 
-    this.devTool = new DevTool()
+    this.devTool = isWeChat ? null : new DevTool()
+
+    if (isWeChat) {
+      this.canvas = createCanvas()
+    }
+
+    this.ui = new UI(this.canvas)
     this.stage = new Stage()
-    this.ui = new UI()
+
+    if (isWeChat) {
+      this.ui.setOffScreenCanvas(this.stage.getCanvas())
+    }
+
     this.moves = new Group()
     this.drops = new Group()
     this.chops = new Group()
@@ -85,14 +96,12 @@ export default class Game {
 
   private initController (): void {
     this.handleKeyDown = (event) => event instanceof KeyboardEvent && event.keyCode === 32 && this.onActions()
-    this.handleClick = () => this.onActions()
     this.handleTouch = () => this.onActions()
 
-    if (isMobile) {
-      document.addEventListener('touchstart', this.handleTouch)
-    } else {
+    bindTapEvent(this.handleTouch)
+
+    if (!isWeChat && isMobile) {
       document.addEventListener('keydown', this.handleKeyDown)
-      document.addEventListener('click', this.handleClick)
     }
   }
 
@@ -144,7 +153,7 @@ export default class Game {
   }
 
   public addMovingBlock (props: BlockOptions = {}): Block {
-    let moving = this.devTool.isCheat === true ? false : true
+    let moving = this.devTool && this.devTool && this.devTool.isCheat === true ? false : true
     let block = this.addBlock({ ...props, moving })
 
     this.moves.add(block.mesh)
@@ -218,7 +227,7 @@ export default class Game {
           ? [Game.movingRanges.moveXStart, Game.movingRanges.moveXEnd][randomKey]
           : [Game.movingRanges.moveZStart, Game.movingRanges.moveZEnd][randomKey]
 
-        if (this.devTool.isCheat === true) {
+        if (this.devTool && this.devTool && this.devTool.isCheat === true) {
           delete movePosition[axis === 'x' ? 'z' : 'x']
         }
 
@@ -279,7 +288,7 @@ export default class Game {
         : [Game.movingRanges.moveZStart, Game.movingRanges.moveZEnd][randomKey]
     }
 
-    if (this.devTool.isCheat === true) {
+    if (this.devTool && this.devTool.isCheat === true) {
       delete position[direction]
     }
 
@@ -339,7 +348,7 @@ export default class Game {
   }
 
   public nextTick (): void {
-    this.devTool.begin()
+    this.devTool && this.devTool.begin()
 
     this.ui.render()
     this.stage.render()
@@ -351,17 +360,18 @@ export default class Game {
       this.dropBlock = null
     }
 
-    this.devTool.end()
+    this.devTool && this.devTool.end()
     requestAnimationFrame(this.nextTick)
   }
 
   public destory (): void {
-    document.removeEventListener('keydown', this.handleKeyDown)
-    document.removeEventListener('click', this.handleClick)
-    document.removeEventListener('touchstart', this.handleTouch)
+    unbindTapEvent(this.handleTouch)
+
+    if (!isWeChat && isMobile) {
+      document.removeEventListener('keydown', this.handleKeyDown)
+    }
 
     this.handleKeyDown = undefined
-    this.handleClick = undefined
     this.handleTouch = undefined
   }
 }
