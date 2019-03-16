@@ -1,0 +1,32 @@
+{
+	"projectname": "tower-blocks",
+	"description": "微信小游戏配置",
+	"appid": "wx782ea665cbc6038f",
+	"libVersion": "1.9.94",
+	"compileType": "game",
+	"miniprogramRoot": "app/",
+	"setting": {
+		"urlCheck": false,
+		"es6": false,
+		"minified": false,
+		"newFeature": true
+	},
+	"condition": {
+		"search": {
+			"current": -1,
+			"list": []
+		},
+		"conversation": {
+			"current": -1,
+			"list": []
+		},
+		"game": {
+			"currentL": -1,
+			"list": []
+		},
+		"miniprogram": {
+			"current": -1,
+			"list": []
+		}
+	}
+}

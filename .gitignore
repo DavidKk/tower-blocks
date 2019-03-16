@@ -1,12 +1,13 @@
 # Output files
+/app
 /dist
+/shell
 
 
 # Dependency folders
 node_modules
 npm-debug.log
 .npmrc
-
 
 # NPM
 npm-shrinkwrap.json
