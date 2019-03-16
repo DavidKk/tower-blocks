@@ -10,10 +10,7 @@ export default class Stage {
   private camera: OrthographicCamera
   private light: SpotLight
   private renderer: WebGLRenderer
-  private score: HTMLElement
-  private play: HTMLElement
-  private message: HTMLElement
-  private canvas: HTMLElement
+  private canvas: HTMLCanvasElement
 
   constructor () {
     this.scene = new Scene()
@@ -33,36 +30,23 @@ export default class Stage {
     this.light.shadow.mapSize.height = 2048
     this.scene.add(this.light)
 
-    this.renderer = new WebGLRenderer({ antialias: true, alpha: true })
+    this.canvas = document.createElement('canvas')
+    this.renderer = new WebGLRenderer({ canvas: this.canvas, antialias: true, alpha: true })
     this.renderer.setSize(window.innerWidth, window.innerHeight)
-
-    this.score = document.getElementById('score')
-    this.play = document.getElementById('play')
-    this.message = document.getElementById('message')
-    this.canvas = this.renderer.domElement
 
     window.addEventListener('resize', this.resize.bind(this))
     this.resize()
 
     document.body.style.backgroundColor = '#d0cbc7'
-    this.score.parentElement.style.display = 'block'
-    this.play.style.display = 'block'
-
     document.body.appendChild(this.canvas)
   }
 
-  private toggleElement (element: HTMLElement, isOpen: boolean = true): void {
-    isOpen === true ? element.classList.add('in') : element.classList.remove('in')
+  public add (element: Object3D): void {
+    this.scene.add(element)
   }
 
-  public detectOffScreen (object: Object3D): boolean {
-    this.camera.updateMatrix()
-    this.camera.updateMatrixWorld(false)
-
-    let frustum = new Frustum()
-    frustum.setFromMatrix(new Matrix4().multiplyMatrices(this.camera.projectionMatrix, this.camera.matrixWorldInverse))
-
-    return frustum.intersectsObject(object) === false
+  public render (): void {
+    this.renderer.render(this.scene, this.camera)
   }
 
   public resize (): void {
@@ -75,27 +59,13 @@ export default class Stage {
     this.camera.updateProjectionMatrix()
   }
 
-  public add (element: Object3D): void {
-    this.scene.add(element)
-  }
+  public detectOffScreen (object: Object3D): boolean {
+    this.camera.updateMatrix()
+    this.camera.updateMatrixWorld(false)
 
-  public render (): void {
-    this.renderer.render(this.scene, this.camera)
-  }
+    let frustum = new Frustum()
+    frustum.setFromMatrix(new Matrix4().multiplyMatrices(this.camera.projectionMatrix, this.camera.matrixWorldInverse))
 
-  public setScore (score: number): void {
-    this.score.innerText = score * 100 + ''
-  }
-
-  public setMessage (message: string): void {
-    this.message.innerText = message
-  }
-
-  public togglePlay (isOpen: boolean = true): void {
-    return this.toggleElement(this.play, isOpen)
-  }
-
-  public toggleMessage (isOpen: boolean = true): void {
-    return this.toggleElement(this.message, isOpen)
+    return frustum.intersectsObject(object) === false
   }
 }

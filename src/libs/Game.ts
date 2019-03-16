@@ -3,6 +3,7 @@ import { Group, Color } from 'three'
 import Block from './Block'
 import Stage from './Stage'
 import DevTool from './DevTool'
+import UI from './Ui'
 import {
   TouchEventHandle,
   BlockDirection,
@@ -34,6 +35,7 @@ export default class Game {
   private viewOffsetY: number
   private devTool: DevTool
   private stage: Stage
+  private ui: UI
   private moves: Group
   private drops: Group
   private chops: Group
@@ -56,6 +58,7 @@ export default class Game {
 
     this.devTool = new DevTool()
     this.stage = new Stage()
+    this.ui = new UI()
     this.moves = new Group()
     this.drops = new Group()
     this.chops = new Group()
@@ -238,7 +241,7 @@ export default class Game {
           }
 
           this.score ++
-          this.stage.setScore(this.score)
+          this.ui.setScore(this.score)
 
         } else {
           if (overlap > 0.3) {
@@ -247,7 +250,7 @@ export default class Game {
             this.topBlock = this.addChoppedBlock({ dimension: chopDimension, position: chopPosition, color })
 
             this.score++
-            this.stage.setScore(this.score)
+            this.ui.setScore(this.score)
           }
 
           this.end()
@@ -263,7 +266,7 @@ export default class Game {
       return
     }
 
-    this.stage.togglePlay(false)
+    this.ui.togglePlayButton(false)
     this.topBlock && this.delChoppedBlock(this.topBlock)
     this.topBlock = this.addChoppedBlock()
     this.index++
@@ -292,8 +295,8 @@ export default class Game {
     this.playing = false
     this.finished = true
 
-    this.stage.setMessage('Game Over')
-    this.stage.toggleMessage(true)
+    this.ui.setMessage('Game Over')
+    this.ui.toggleMessage(true)
   }
 
   public lose (): void {
@@ -322,14 +325,14 @@ export default class Game {
           this.viewOffsetY = -15
 
           this.topBlock = this.addChoppedBlock()
-          this.stage.setScore(this.score)
-          this.stage.togglePlay(true)
+          this.ui.setScore(this.score)
+          this.ui.togglePlayButton(true)
 
           resolve()
         }
       }
 
-      this.stage.toggleMessage(false)
+      this.ui.toggleMessage(false)
 
       finished()
     })
@@ -338,6 +341,7 @@ export default class Game {
   public nextTick (): void {
     this.devTool.begin()
 
+    this.ui.render()
     this.stage.render()
     this.blocks.forEach((block) => block.nextTick())
 
