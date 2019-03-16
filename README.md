@@ -2,7 +2,7 @@
 
 # Tower Blocks
 
-A game for tree.js. (Personal learning)
+A block stack game for tree.js. (Personal learning)
 
 ## Demo
 
