@@ -7,3 +7,4 @@ A game for tree.js. (Personal learning)
 ## Demo
 
 - [Online](https://davidkk.github.io/tower-blocks/)
+- [国内](http://david.gitee.io/tower-blocks/)
