@@ -1,5 +1,5 @@
 import { isWeChat } from '../share/device'
-import { createCanvas, getWindowSize } from '../share/adapter'
+import { createCanvas } from '../share/adapter'
 import { pxToRem } from '../share/styles'
 
 export default class UI {
@@ -86,7 +86,9 @@ export default class UI {
   }
 
   public render (): void {
-    let { width: screenWidth, height: screenHeight } = getWindowSize()
+    let screenWidth = window.innerWidth
+    let screenHeight = window.innerHeight
+
     this.context.clearRect(0, 0, screenWidth, screenHeight)
     this.offScreenCanvas && this.context.drawImage(this.offScreenCanvas, 0, 0, screenWidth, screenHeight)
 
@@ -96,7 +98,8 @@ export default class UI {
   }
 
   public resize (): void {
-    let { width: screenWidth, height: screenHeight } = getWindowSize()
+    let screenWidth = window.innerWidth
+    let screenHeight = window.innerHeight
     this.canvas.width = screenWidth
     this.canvas.height = screenHeight
     this.canvas.style.width = screenWidth + 'px'
@@ -104,7 +107,8 @@ export default class UI {
   }
 
   private drawPlayButton (): void {
-    let { width: screenWidth, height: screenHeight } = getWindowSize()
+    let screenWidth = window.innerWidth
+    let screenHeight = window.innerHeight
     let textColor = `rgba(51,51,51,${this.playButtonOpacity / 100})`
     let textContent = 'Tap Start Game'
     let textX = screenWidth / 2
@@ -121,7 +125,8 @@ export default class UI {
   }
 
   private drawScore (score?: number): void {
-    let { width: screenWidth, height: screenHeight } = getWindowSize()
+    let screenWidth = window.innerWidth
+    let screenHeight = window.innerHeight
     let textColor = `rgba(51,51,51,1)`
     let textContent = `Score: ${score || 0}`
     let textX = screenWidth / 2
@@ -138,7 +143,8 @@ export default class UI {
   }
 
   private drawMessage (message?: string): void {
-    let { width: screenWidth, height: screenHeight } = getWindowSize()
+    let screenWidth = window.innerWidth
+    let screenHeight = window.innerHeight
     this.context.fillStyle = `rgba(255,255,255,${this.messageOpacity / 100})`
     this.context.fillRect(0, (screenHeight - 192) / 2, screenWidth, 192)
 

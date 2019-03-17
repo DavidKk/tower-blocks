@@ -60,14 +60,15 @@ export default class Game {
     this.devTool = isWeChat ? null : new DevTool()
 
     if (isWeChat) {
-      this.canvas = createCanvas()
+      this.canvas = typeof canvas !== 'undefined' ? canvas : createCanvas()
     }
 
     this.stage = new Stage()
     this.ui = new UI(this.canvas)
 
     if (isWeChat) {
-      this.ui.setOffScreenCanvas(this.stage.getCanvas())
+      let offScreenCanvas = this.stage.getCanvas()
+      this.ui.setOffScreenCanvas(offScreenCanvas)
     }
 
     this.moves = new Group()
