@@ -11,6 +11,11 @@ export interface BlockDimension {
   height: number
 }
 
+export interface WindowSizeInfo {
+  width: number
+  height: number
+}
+
 export enum BlockDirection {
   x = 'x',
   z = 'z'

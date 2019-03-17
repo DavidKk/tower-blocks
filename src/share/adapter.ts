@@ -1,5 +1,5 @@
 import { isWeChat, isMobile } from './device'
-import { TouchEventHandle } from '../types'
+import { TouchEventHandle, WindowSizeInfo } from '../types'
 
 export const createCanvas = (): HTMLCanvasElement => {
   if (isWeChat) {
@@ -41,4 +41,15 @@ export const unbindTapEvent = (handle: TouchEventHandle): void => {
     ? document.removeEventListener('touchstart', handle)
     : document.removeEventListener('click', handle)
   }
+}
+
+export const getWindowSize = (): WindowSizeInfo => {
+  if (isWeChat) {
+    let { windowWidth: width, windowHeight: height } = wx.getSystemInfoSync()
+    return { width, height }
+  }
+
+  let width = window.innerWidth
+  let height = window.innerHeight
+  return { width, height }
 }

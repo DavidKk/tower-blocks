@@ -3,7 +3,7 @@ import {
   WebGLRenderer,
   Vector3, Frustum, Matrix4, Object3D
 } from 'three'
-import { createCanvas } from '../share/adapter'
+import { createCanvas, getWindowSize } from '../share/adapter'
 import { isWeChat } from '../share/device'
 
 export default class Stage {
@@ -18,8 +18,7 @@ export default class Stage {
     this.viewSize = 30
     this.scene = new Scene()
 
-    let screenWidth = window.innerWidth
-    let screenHeight = window.innerHeight
+    let { width: screenWidth, height: screenHeight } = getWindowSize()
     let aspect = screenWidth / screenHeight
 
     this.camera = new OrthographicCamera(-this.viewSize * aspect, this.viewSize * aspect, this.viewSize, -this.viewSize, -100, 1000)
@@ -54,8 +53,9 @@ export default class Stage {
   }
 
   public resize (): void {
-    let aspect = window.innerWidth / window.innerHeight
-    this.renderer.setSize(window.innerWidth, window.innerHeight)
+    let { width: screenWidth, height: screenHeight } = getWindowSize()
+    let aspect = screenWidth / screenHeight
+    this.renderer.setSize(screenWidth, screenHeight)
     this.camera.left = -this.viewSize * aspect
     this.camera.right = this.viewSize * aspect
     this.camera.top = this.viewSize

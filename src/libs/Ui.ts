@@ -1,5 +1,5 @@
 import { isWeChat } from '../share/device'
-import { createCanvas } from '../share/adapter'
+import { createCanvas, getWindowSize } from '../share/adapter'
 import { pxToRem } from '../share/styles'
 
 export default class UI {
@@ -86,9 +86,7 @@ export default class UI {
   }
 
   public render (): void {
-    let screenWidth = window.innerWidth
-    let screenHeight = window.innerHeight
-
+    let { width: screenWidth, height: screenHeight } = getWindowSize()
     this.context.clearRect(0, 0, screenWidth, screenHeight)
     this.offScreenCanvas && this.context.drawImage(this.offScreenCanvas, 0, 0, screenWidth, screenHeight)
 
@@ -98,17 +96,19 @@ export default class UI {
   }
 
   public resize (): void {
-    this.canvas.width = window.innerWidth
-    this.canvas.height = window.innerHeight
-    this.canvas.style.width = window.innerWidth + 'px'
-    this.canvas.style.height = window.innerHeight + 'px'
+    let { width: screenWidth, height: screenHeight } = getWindowSize()
+    this.canvas.width = screenWidth
+    this.canvas.height = screenHeight
+    this.canvas.style.width = screenWidth + 'px'
+    this.canvas.style.height = screenHeight + 'px'
   }
 
   private drawPlayButton (): void {
+    let { width: screenWidth, height: screenHeight } = getWindowSize()
     let textColor = `rgba(51,51,51,${this.playButtonOpacity / 100})`
     let textContent = 'Tap Start Game'
-    let textX = window.innerWidth / 2
-    let textY = window.innerHeight * 0.9
+    let textX = screenWidth / 2
+    let textY = screenHeight * 0.9
 
     this.context.font = `bold ${pxToRem(48)} 微软雅黑`
     this.context.textAlign = 'center'
@@ -121,10 +121,11 @@ export default class UI {
   }
 
   private drawScore (score?: number): void {
+    let { width: screenWidth, height: screenHeight } = getWindowSize()
     let textColor = `rgba(51,51,51,1)`
     let textContent = `Score: ${score || 0}`
-    let textX = window.innerWidth / 2
-    let textY = window.innerHeight * 0.1
+    let textX = screenWidth / 2
+    let textY = screenHeight * 0.1
 
     this.context.font = `bold ${pxToRem(48)} 微软雅黑`
     this.context.textAlign = 'center'
@@ -137,16 +138,17 @@ export default class UI {
   }
 
   private drawMessage (message?: string): void {
+    let { width: screenWidth, height: screenHeight } = getWindowSize()
     this.context.fillStyle = `rgba(255,255,255,${this.messageOpacity / 100})`
-    this.context.fillRect(0, (window.innerHeight - 192) / 2, window.innerWidth, 192)
+    this.context.fillRect(0, (screenHeight - 192) / 2, screenWidth, 192)
 
     this.context.save()
     this.context.restore()
 
     let textColor = `rgba(68,68,68,${this.messageOpacity / 100})`
     let textContent = message || ''
-    let textX = window.innerWidth / 2
-    let textY = window.innerHeight / 2
+    let textX = screenWidth / 2
+    let textY = screenHeight / 2
 
     this.context.font = `bold ${pxToRem(96)} 微软雅黑`
     this.context.textAlign = 'center'

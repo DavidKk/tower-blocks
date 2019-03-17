@@ -63,8 +63,8 @@ export default class Game {
       this.canvas = createCanvas()
     }
 
-    this.ui = new UI(this.canvas)
     this.stage = new Stage()
+    this.ui = new UI(this.canvas)
 
     if (isWeChat) {
       this.ui.setOffScreenCanvas(this.stage.getCanvas())

@@ -1,7 +1,7 @@
 {
 	"projectname": "tower-blocks",
 	"description": "微信小游戏配置",
-	"appid": "wx782ea665cbc6038f",
+	"appid": "wx1d112717888c4ab1",
 	"libVersion": "1.9.94",
 	"compileType": "game",
 	"miniprogramRoot": "app/",
