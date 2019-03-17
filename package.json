@@ -27,7 +27,7 @@
     "wx:release": "concurrently \"npm run compile:shell && node ./shell/parcel-wx\" \"parcel build ./src/game.ts --out-dir app --no-cache --no-source-maps\"",
     "develop": "rimraf ./dist ./.cache && parcel ./src/index.html --no-hmr",
     "release": "rimraf ./dist ./.cache && parcel build ./src/index.html --public-url /tower-blocks/",
-    "start": "concurrently \"npm run wx:release\" \"npm run develop\""
+    "start": "npm run develop"
   },
   "devDependencies": {
     "@types/chalk": "^2.2.0",

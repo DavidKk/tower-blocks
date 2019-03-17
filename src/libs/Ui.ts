@@ -4,7 +4,6 @@ import { pxToRem } from '../share/styles'
 
 export default class UI {
   private canvas: HTMLCanvasElement
-  private offScreenCanvas: HTMLCanvasElement
   private context: CanvasRenderingContext2D
   private score: number
   private message: string
@@ -88,9 +87,7 @@ export default class UI {
   public render (): void {
     let screenWidth = window.innerWidth
     let screenHeight = window.innerHeight
-
     this.context.clearRect(0, 0, screenWidth, screenHeight)
-    this.offScreenCanvas && this.context.drawImage(this.offScreenCanvas, 0, 0, screenWidth, screenHeight)
 
     this.drawScore(this.score)
     this.messageVisible === true && this.drawMessage(this.message)
@@ -219,9 +216,5 @@ export default class UI {
 
   public getCanvas (): HTMLCanvasElement {
     return this.canvas
-  }
-
-  public setOffScreenCanvas (canvas: HTMLCanvasElement) {
-    this.offScreenCanvas = canvas
   }
 }

@@ -13,7 +13,7 @@ export const createCanvas = (): HTMLCanvasElement => {
   canvas.style.position = 'fixed'
   canvas.style.left = '0'
   canvas.style.top = '0'
-  canvas.style.zIndex = '40000'
+  canvas.style.zIndex = '400'
   canvas.style.width = window.innerWidth + 'px'
   canvas.style.height = window.innerHeight + 'px'
 

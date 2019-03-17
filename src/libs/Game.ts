@@ -34,7 +34,6 @@ export default class Game {
   private movingSpeed: number
   private viewMaxY: number
   private viewOffsetY: number
-  private canvas: HTMLCanvasElement
   private devTool: DevTool
   private stage: Stage
   private ui: UI
@@ -56,19 +55,14 @@ export default class Game {
     this.movingSpeed = 0.2
     this.viewMaxY = 30
     this.viewOffsetY = -15
-
     this.devTool = isWeChat ? null : new DevTool()
 
-    if (isWeChat) {
-      this.canvas = typeof canvas !== 'undefined' ? canvas : createCanvas()
-    }
-
-    this.stage = new Stage()
-    this.ui = new UI(this.canvas)
+    this.stage = new Stage(isWeChat && typeof canvas !== 'undefined' ? canvas : null)
+    this.ui = new UI()
 
     if (isWeChat) {
-      let offScreenCanvas = this.stage.getCanvas()
-      this.ui.setOffScreenCanvas(offScreenCanvas)
+      let hudCanvas = this.ui.getCanvas()
+      this.stage.setOffScreenCanvas(hudCanvas)
     }
 
     this.moves = new Group()
