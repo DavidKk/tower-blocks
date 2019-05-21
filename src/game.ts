@@ -1,2 +1,5 @@
 import './vendors/weapp-adapter'
-import './index'
+import Game from './libs/Game'
+
+const game = new Game()
+game.play()

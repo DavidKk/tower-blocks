@@ -9,7 +9,7 @@ import {
   BlockDirection,
   BlockOptions,
   BlockPosition
-} from '../types'
+} from '../typings'
 import { createCanvas, bindTapEvent, unbindTapEvent } from '../share/adapter'
 import { isMobile, isWeChat } from '../share/device'
 
@@ -59,26 +59,30 @@ export default class Game {
 
     this.stage = new Stage(isWeChat && typeof canvas !== 'undefined' ? canvas : null)
     this.ui = new UI()
+  }
 
-    if (isWeChat) {
-      let hudCanvas = this.ui.getCanvas()
-      this.stage.setOffScreenCanvas(hudCanvas)
-    }
+  public play (): Promise<any> {
+    return new Promise((resolve) => {
+      if (isWeChat) {
+        let hudCanvas = this.ui.getCanvas()
+        this.stage.setOffScreenCanvas(hudCanvas)
+      }
 
-    this.moves = new Group()
-    this.drops = new Group()
-    this.chops = new Group()
+      this.moves = new Group()
+      this.drops = new Group()
+      this.chops = new Group()
 
-    this.nextTick = this.nextTick.bind(this)
+      this.nextTick = this.nextTick.bind(this)
+      this.stage.add(this.moves)
+      this.stage.add(this.drops)
+      this.stage.add(this.chops)
 
-    this.stage.add(this.moves)
-    this.stage.add(this.drops)
-    this.stage.add(this.chops)
+      this.initController()
+      this.nextTick()
 
-    this.initController()
-    this.nextTick()
-
-    this.topBlock = this.addChoppedBlock()
+      this.topBlock = this.addChoppedBlock()
+      resolve()
+    })
   }
 
   private genOffsetColor (zIndex: number): Color {

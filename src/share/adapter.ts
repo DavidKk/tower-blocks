@@ -1,5 +1,5 @@
 import { isWeChat, isMobile } from './device'
-import { TouchEventHandle } from '../types'
+import { TouchEventHandle } from '../typings'
 
 export const createCanvas = (): HTMLCanvasElement => {
   if (isWeChat) {

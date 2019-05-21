@@ -1,3 +1,9 @@
 import Game from './libs/Game'
+import Spinner from './share/spinner'
 
-export default new Game()
+const startup = () => {
+  Spinner.hide()
+}
+
+const game = new Game()
+game.play().then(startup)

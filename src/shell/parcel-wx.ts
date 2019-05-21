@@ -1,6 +1,6 @@
-import * as path from 'path'
-import * as fs from 'fs-extra'
-import * as chokidar from 'chokidar'
+import path from 'path'
+import fs from 'fs-extra'
+import chokidar from 'chokidar'
 import chalk from 'chalk'
 
 const isWatch = -1 !== process.argv.indexOf('--watch')

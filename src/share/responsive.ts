@@ -1,9 +1,6 @@
 import map from 'lodash/map'
 import fromPairs from 'lodash/fromPairs'
 
-export const RootFontSize = 16
-export const DesignClientWidth = 750
-
 export function unusual (): boolean {
   if (navigator.appVersion.match(/(iphone|ipad|ipod)/ig)) {
     return false
@@ -27,7 +24,7 @@ export function unusual (): boolean {
   return false
 }
 
-export function getRootFontSize (rootFontSize = RootFontSize, designClientWidth = DesignClientWidth): number {
+export function getRootFontSize (rootFontSize = 16, designClientWidth = 750): number {
   let meta = document.querySelector('meta[name="viewport"]')
 
   if (!meta) {
@@ -56,7 +53,7 @@ export function getRootFontSize (rootFontSize = RootFontSize, designClientWidth 
     : rootFontSize / flexRatio * window.devicePixelRatio
 }
 
-export function metaFlex (rootFontSize = RootFontSize, designClientWidth = DesignClientWidth) {
+export function metaFlex (rootFontSize = 16, designClientWidth = 750) {
   let docElement = document.documentElement
   docElement.style.fontSize = `${getRootFontSize(rootFontSize, designClientWidth)}px`
   docElement.style.display = 'none'
@@ -67,6 +64,6 @@ export function metaFlex (rootFontSize = RootFontSize, designClientWidth = Desig
   docElement.style.display = ''
 }
 
-export default function responsive (rootFontSize = RootFontSize, designWidth = DesignClientWidth) {
+export default function responsive (rootFontSize = 16, designWidth = 750) {
   return metaFlex(rootFontSize, designWidth)
 }

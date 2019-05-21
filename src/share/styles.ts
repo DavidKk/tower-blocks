@@ -1,6 +1,7 @@
-import { RootFontSize } from '../services/responsive'
+import { getRootFontSize } from '../share/responsive'
 import { isWeChat } from './device'
 
 export const pxToRem = (fontSize: number): string => {
-  return isWeChat ? `${fontSize / 2}px` : `${fontSize / RootFontSize}rem`
+  const rootFontSize = getRootFontSize()
+  return isWeChat ? `${fontSize / 2}px` : `${fontSize / rootFontSize}rem`
 }

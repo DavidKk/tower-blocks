@@ -7,6 +7,7 @@
   right: 0;
   bottom: 0;
   left: 0;
+  z-index: 444;
   margin: auto;
   width: $cubeSize;
   height: $cubeSize;
@@ -52,7 +53,7 @@
   transform: translateZ($cubeSize / 2 * -1); 
 }
 
-.cube.fade:not(.out) > .cube-face {
+.cube.fade:not(.in) > .cube-face {
   opacity: 0;
 }
 

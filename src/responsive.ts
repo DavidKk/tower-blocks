@@ -1,4 +1,4 @@
-import responsive from './services/responsive'
+import responsive from './share/responsive'
 
 window.addEventListener('resize', () => responsive())
 responsive()

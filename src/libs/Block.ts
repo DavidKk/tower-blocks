@@ -1,7 +1,7 @@
 import pick from 'lodash/pick'
 import defaults from 'lodash/defaults'
 import { BoxGeometry, MeshLambertMaterial, Mesh } from 'three'
-import { BlockDirection, BlockOptions } from '../types'
+import { BlockDirection, BlockOptions } from '../typings'
 
 export default class Block {
   public moving: boolean
