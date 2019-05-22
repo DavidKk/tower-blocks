@@ -4,12 +4,7 @@ import Block from './Block'
 import Stage from './Stage'
 import DevTool from './DevTool'
 import UI from './Ui'
-import {
-  TouchEventHandle,
-  BlockDirection,
-  BlockOptions,
-  BlockPosition
-} from '../typings'
+import * as Typings from '../typings'
 import { createCanvas, bindTapEvent, unbindTapEvent } from '../share/adapter'
 import { isMobile, isWeChat } from '../share/device'
 
@@ -120,7 +115,7 @@ export default class Game {
     }
   }
 
-  public addBlock (props: BlockOptions = {}): Block {
+  public addBlock (props: Typings.BlockOptions = {}): Block {
     let direction = this.index % 2 ? 'x' : 'z'
     let position = { x: 0, y: this.index, z: 0 }
     let color = this.genOffsetColor(position.y)
@@ -131,7 +126,7 @@ export default class Game {
     return new Block(options)
   }
 
-  public addChoppedBlock (props: BlockOptions = {}): Block {
+  public addChoppedBlock (props: Typings.BlockOptions = {}): Block {
     let block = this.addBlock({ ...props })
 
     this.chops.add(block.mesh)
@@ -151,7 +146,7 @@ export default class Game {
     return false
   }
 
-  public addMovingBlock (props: BlockOptions = {}): Block {
+  public addMovingBlock (props: Typings.BlockOptions = {}): Block {
     let moving = this.devTool && this.devTool && this.devTool.isCheat === true ? false : true
     let block = this.addBlock({ ...props, moving })
 
@@ -172,7 +167,7 @@ export default class Game {
     return false
   }
 
-  public addDropedBlock (props: BlockOptions = {}): Block {
+  public addDropedBlock (props: Typings.BlockOptions = {}): Block {
     let block = this.addBlock({ ...props, dropping: true })
 
     this.drops.add(block.mesh)
@@ -279,10 +274,10 @@ export default class Game {
     this.topBlock = this.addChoppedBlock()
     this.index++
 
-    let direction = this.index % 2 ? BlockDirection.x : BlockDirection.z
+    let direction = this.index % 2 ? Typings.BlockDirection.x : Typings.BlockDirection.z
     let randomKey = Math.round(Math.random())
-    let position: BlockPosition = {
-      [direction]: direction === BlockDirection.x
+    let position: Typings.BlockPosition = {
+      [direction]: direction === Typings.BlockDirection.x
         ? [Game.movingRanges.moveXStart, Game.movingRanges.moveXEnd][randomKey]
         : [Game.movingRanges.moveZStart, Game.movingRanges.moveZEnd][randomKey]
     }

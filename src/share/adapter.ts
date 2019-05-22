@@ -1,5 +1,5 @@
 import { isWeChat, isMobile } from './device'
-import { TouchEventHandle } from '../typings'
+import * as Typings from '../typings'
 
 export const createCanvas = (): HTMLCanvasElement => {
   if (isWeChat) {
@@ -21,7 +21,7 @@ export const createCanvas = (): HTMLCanvasElement => {
   return canvas
 }
 
-export const bindTapEvent = (handle: TouchEventHandle): void => {
+export const bindTapEvent = (handle: Typings.TouchEventHandle): void => {
   if (isWeChat) {
     wx.onTouchStart(handle)
 
@@ -32,7 +32,7 @@ export const bindTapEvent = (handle: TouchEventHandle): void => {
   }
 }
 
-export const unbindTapEvent = (handle: TouchEventHandle): void => {
+export const unbindTapEvent = (handle: Typings.TouchEventHandle): void => {
   if (isWeChat) {
     wx.offTouchStart(handle)
 

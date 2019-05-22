@@ -1,12 +1,12 @@
 import pick from 'lodash/pick'
 import defaults from 'lodash/defaults'
 import { BoxGeometry, MeshLambertMaterial, Mesh } from 'three'
-import { BlockDirection, BlockOptions } from '../typings'
+import * as Typings from '../typings'
 
 export default class Block {
   public moving: boolean
   public dropping: boolean
-  public direction: keyof typeof BlockDirection
+  public direction: keyof typeof Typings.BlockDirection
   public speed: number
   public color: number
   public geometry: BoxGeometry
@@ -41,13 +41,13 @@ export default class Block {
     return this.direction === 'x' ? this.moveXEnd : this.moveZEnd
   }
 
-  constructor (props: BlockOptions = {}) {
+  constructor (props: Typings.BlockOptions = {}) {
     let position = defaults({}, props.position, { x: 0, y: 0, z: 0 })
     let dimension = defaults({}, props.dimension, { width: 10, height: 1, depth: 10 })
 
     this.moving = props.hasOwnProperty('moving') ? props.moving : false
     this.dropping = props.hasOwnProperty('dropping') ? props.dropping : false
-    this.direction = props.hasOwnProperty('direction') ? props.direction : BlockDirection.x
+    this.direction = props.hasOwnProperty('direction') ? props.direction : Typings.BlockDirection.x
     this.speed = props.hasOwnProperty('speed') ? props.speed : 0.2
     this.moveXStart = props.hasOwnProperty('moveXStart') ? props.moveXStart : position.x - 12
     this.moveXEnd = props.hasOwnProperty('moveXEnd') ? props.moveXEnd : position.x + 12

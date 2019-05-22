@@ -11,6 +11,8 @@
 		"minified": false,
 		"newFeature": true
 	},
+	"simulatorType": "wechat",
+	"simulatorPluginLibVersion": {},
 	"condition": {
 		"search": {
 			"current": -1,

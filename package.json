@@ -1,6 +1,6 @@
 {
   "name": "tower-blocks",
-  "description": "Tower Blocks Game",
+  "description": "a game for tower blocks",
   "version": "1.0.0",
   "author": "DavidJones <qowera@qq.com>",
   "license": "MIT",
@@ -19,25 +19,32 @@
   },
   "scripts": {
     "lint-staged": "lint-staged",
-    "tslint": "tslint --config ./tslint.json --fix './src/**/*.ts'",
+    "tslint": "tslint --config ./tslint.json --fix './src/**/*.ts' './bundler/**/*.ts'",
     "lint": "npm run tslint",
     "test": "npm run lint",
-    "compile:shell": "tsc --outDir ./shell ./src/shell/*.ts",
-    "wx:develop": "concurrently \"npm run compile:shell && node ./shell/parcel-wx --watch\" \"parcel ./src/game.ts --out-dir app --no-cache --no-source-maps --no-hmr\"",
-    "wx:release": "concurrently \"npm run compile:shell && node ./shell/parcel-wx\" \"parcel build ./src/game.ts --out-dir app --no-cache --no-source-maps\"",
-    "develop": "rimraf ./dist ./.cache && parcel ./src/index.html --no-hmr",
-    "release": "rimraf ./dist ./.cache && parcel build ./src/index.html --public-url /tower-blocks/",
+    "bundler": "tsc --project ./bundler --outDir ./libs/bundler",
+    "compile": "rimraf ./app ./.cache && npm run bundler",
+    "develop": "npm run compile && node ./libs/bundler/index.js",
+    "release": "npm run compile && cross-env NODE_ENV=production node ./libs/bundler/index.js",
     "start": "npm run develop"
   },
   "devDependencies": {
     "@types/chalk": "^2.2.0",
+    "@types/express": "^4.16.1",
     "@types/fs-extra": "^7.0.0",
+    "@types/ip": "^1.1.0",
+    "@types/lodash": "^4.14.121",
     "@types/node": "^11.10.5",
+    "@types/parcel-bundler": "^1.12.0",
+    "@types/stats.js": "^0.17.0",
+    "@types/three": "^0.93.22",
     "autoprefixer": "^9.5.0",
     "chalk": "^2.4.2",
     "chokidar": "^3.0.0",
-    "concurrently": "^4.1.0",
+    "cross-env": "^5.2.0",
+    "express": "^4.17.0",
     "fs-extra": "^8.0.1",
+    "ip": "^1.1.5",
     "lint-staged": "^7.2.2",
     "parcel-bundler": "^1.11.0",
     "postcss-pxtorem": "^4.0.1",
@@ -49,9 +56,6 @@
     "typescript": "^3.3.3"
   },
   "dependencies": {
-    "@types/lodash": "^4.14.121",
-    "@types/stats.js": "^0.17.0",
-    "@types/three": "^0.93.22",
     "stats.js": "^0.17.0",
     "three": "^0.102.0"
   }

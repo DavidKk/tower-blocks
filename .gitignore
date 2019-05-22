@@ -1,8 +1,7 @@
 # Output files
 /app
 /dist
-/shell
-
+/libs
 
 # Dependency folders
 node_modules
