@@ -8,16 +8,16 @@ import { createCanvas } from '../share/adapter'
 import { isWeChat } from '../share/device'
 
 export default class Stage {
-  private canvas: HTMLCanvasElement
-  private viewSize: number
-  private renderer: WebGLRenderer
-  private light: SpotLight
-  private scene: Scene
-  private camera: OrthographicCamera
-  private hudCanvas: HTMLCanvasElement
-  private hudScene: Scene
-  private hudCamera: OrthographicCamera
-  private needUpdateTextures: Array<Texture>
+  public canvas: HTMLCanvasElement
+  public viewSize: number
+  public renderer: WebGLRenderer
+  public light: SpotLight
+  public scene: Scene
+  public camera: OrthographicCamera
+  public hudCanvas: HTMLCanvasElement
+  public hudScene: Scene
+  public hudCamera: OrthographicCamera
+  public needUpdateTextures: Array<Texture>
 
   constructor (canvas?: HTMLCanvasElement) {
     this.viewSize = 30
@@ -60,8 +60,6 @@ export default class Stage {
       texture.needsUpdate = true
     })
 
-    // this.renderer
-    // this.renderer.setClearColor(0xd0cbc7, 1)
     this.renderer.render(this.scene, this.camera)
 
     if (this.hudScene && this.hudCamera) {
@@ -90,10 +88,6 @@ export default class Stage {
     frustum.setFromMatrix(new Matrix4().multiplyMatrices(this.camera.projectionMatrix, this.camera.matrixWorldInverse))
 
     return frustum.intersectsObject(object) === false
-  }
-
-  public getCanvas (): HTMLCanvasElement {
-    return this.canvas
   }
 
   public setOffScreenCanvas (canvas: HTMLCanvasElement): void {

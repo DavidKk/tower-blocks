@@ -59,7 +59,7 @@ export default class Game {
   public play (): Promise<any> {
     return new Promise((resolve) => {
       if (isWeChat) {
-        let hudCanvas = this.ui.getCanvas()
+        let hudCanvas = this.ui.canvas
         this.stage.setOffScreenCanvas(hudCanvas)
       }
 

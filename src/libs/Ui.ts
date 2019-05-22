@@ -3,17 +3,17 @@ import { createCanvas } from '../share/adapter'
 import { pxToRem } from '../share/styles'
 
 export default class UI {
-  private canvas: HTMLCanvasElement
-  private context: CanvasRenderingContext2D
-  private score: number
-  private message: string
-  private playButtonVisible: boolean
-  private playButtonOpacity: number
-  private playButtonTransitionToken: Symbol
-  private messageVisible: boolean
-  private messageOpacity: number
-  private messageTransitionToken: Symbol
-  private transitions: Array<Symbol>
+  public canvas: HTMLCanvasElement
+  public context: CanvasRenderingContext2D
+  public score: number
+  public message: string
+  public playButtonVisible: boolean
+  public playButtonOpacity: number
+  public playButtonTransitionToken: Symbol
+  public messageVisible: boolean
+  public messageOpacity: number
+  public messageTransitionToken: Symbol
+  public transitions: Array<Symbol>
 
   constructor (canvas?: HTMLCanvasElement) {
     this.score = 0
@@ -212,9 +212,5 @@ export default class UI {
 
     elapsed --
     return -amountOfChange / 2 * (elapsed * (elapsed - 2) - 1) + initialValue
-  }
-
-  public getCanvas (): HTMLCanvasElement {
-    return this.canvas
   }
 }
