@@ -2,8 +2,9 @@ import * as path from 'path'
 import http, { IncomingMessage, ServerResponse } from 'http'
 import chalk from 'chalk'
 import ip from 'ip'
-import Bundler, { ParcelOptions } from 'parcel-bundler'
 import express from 'express'
+import Bundler, { ParcelOptions } from 'parcel-bundler'
+import portscanner from 'portscanner'
 import { copyJsonFile } from './share'
 import * as conf from './conf'
 
@@ -11,7 +12,7 @@ const app = express()
 const ProejctFileName = 'project.config.json'
 const GameJsonFileName = 'game.json'
 
-export default function bundle (webEntry: string, appEntry: string, optoins?: ParcelOptions) {
+export default async function bundle (webEntry: string, appEntry: string, optoins?: ParcelOptions): Promise<void> {
   const bundler = new Bundler(webEntry, optoins)
   bundler.on('buildStart', async (entryPoints) => {
     entryPoints.push(appEntry)
@@ -25,8 +26,8 @@ export default function bundle (webEntry: string, appEntry: string, optoins?: Pa
     return Promise.all(promises)
   })
 
-  const port = 3000
   const host = ip.address()
+  const port = await portscanner.findAPortNotInUse(3000, 8000, host)
 
   const defaultRoute = (request: IncomingMessage, response: ServerResponse) => {
     const options = {
