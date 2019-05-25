@@ -7,9 +7,9 @@ const options: ParcelOptions = {
   publicUrl: conf.isRelease ? '/tower-blocks/' : '/',
   watch: !conf.isRelease,
   minify: conf.isRelease,
-  sourceMaps: false,
-  contentHash: true,
+  sourceMaps: !conf.isRelease,
+  contentHash: conf.isRelease,
   hmr: false
 }
 
-bundle(conf.webEntry, conf.appEntry, options)
+bundle([conf.webEntry, conf.appEntry], options)

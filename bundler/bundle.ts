@@ -12,11 +12,8 @@ const app = express()
 const ProejctFileName = 'project.config.json'
 const GameJsonFileName = 'game.json'
 
-export default async function bundle (webEntry: string, appEntry: string, optoins?: ParcelOptions): Promise<void> {
+export default async function bundle (webEntry: string | string[], optoins?: ParcelOptions): Promise<void> {
   const bundler = new Bundler(webEntry, optoins)
-  bundler.on('buildStart', async (entryPoints) => {
-    entryPoints.push(appEntry)
-  })
 
   bundler.on('bundled', () => {
     const projFile = path.join(conf.rootPath, ProejctFileName)
